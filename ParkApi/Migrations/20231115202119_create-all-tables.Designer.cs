@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ParkApi.Data;
@@ -11,9 +12,11 @@ using ParkApi.Data;
 namespace ParkApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115202119_create-all-tables")]
+    partial class createalltables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,11 +27,15 @@ namespace ParkApi.Migrations
 
             modelBuilder.Entity("ParkApi.Data.Favourites", b =>
                 {
-                    b.Property<int>("ParkId")
+                    b.Property<int>("ParkId1")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
+                    b.Property<int>("UserId1")
                         .HasColumnType("integer");
+
+                    b.HasIndex("ParkId1");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("favourites");
                 });
@@ -151,6 +158,25 @@ namespace ParkApi.Migrations
                     b.HasKey("UserId");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("ParkApi.Data.Favourites", b =>
+                {
+                    b.HasOne("ParkApi.Data.Parks", "ParkId")
+                        .WithMany()
+                        .HasForeignKey("ParkId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ParkApi.Data.Users", "UserId")
+                        .WithMany()
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ParkId");
+
+                    b.Navigation("UserId");
                 });
 
             modelBuilder.Entity("ParkApi.Data.Parks", b =>

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ParkApi.Data;
@@ -11,9 +12,11 @@ using ParkApi.Data;
 namespace ParkApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231115184814_create-frist-connection")]
+    partial class createfristconnection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,17 +24,6 @@ namespace ParkApi.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("ParkApi.Data.Favourites", b =>
-                {
-                    b.Property<int>("ParkId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.ToTable("favourites");
-                });
 
             modelBuilder.Entity("ParkApi.Data.FeaturesList", b =>
                 {
@@ -108,9 +100,6 @@ namespace ParkApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ParkDescription")
                         .IsRequired()
                         .HasColumnType("text");
@@ -123,12 +112,10 @@ namespace ParkApi.Migrations
 
                     b.HasIndex("FeaturesIDFeaturesListId");
 
-                    b.HasIndex("LocationId");
-
                     b.ToTable("parks");
                 });
 
-            modelBuilder.Entity("ParkApi.Data.Users", b =>
+            modelBuilder.Entity("ParkApi.Data.User", b =>
                 {
                     b.Property<int>("UserId")
                         .ValueGeneratedOnAdd()
@@ -161,15 +148,7 @@ namespace ParkApi.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ParkApi.Data.LocationDetail", "LocationID")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("FeaturesID");
-
-                    b.Navigation("LocationID");
                 });
 #pragma warning restore 612, 618
         }
