@@ -12,6 +12,7 @@ namespace ParkApi.model
         public string? PostalCode { get; set; }
         public string? Street { get; set; }
         public string? Coodinates { get; set; }
+        public Parks? Parks { get; set; } = null!; //navegação para a tabela principal
 
     }
 }

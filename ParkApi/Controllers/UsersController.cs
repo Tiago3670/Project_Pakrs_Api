@@ -150,7 +150,7 @@ namespace ParkApi.Controllers
 
             try
             {
-                await _context.FeaturesLists.AddAsync(_featuresList);
+                await _context.FeaturesList.AddAsync(_featuresList);
                 _context.SaveChanges();
 
                 return Ok(_featuresList);

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using ParkApi.Data;
@@ -11,9 +12,11 @@ using ParkApi.Data;
 namespace ParkApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231116171317_migrat3")]
+    partial class migrat3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -35,11 +38,8 @@ namespace ParkApi.Migrations
 
             modelBuilder.Entity("ParkApi.model.FeaturesList", b =>
                 {
-                    b.Property<int>("FeaturesId")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("FeaturesListId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("FeaturesId"));
 
                     b.Property<bool?>("Entertainment")
                         .HasColumnType("boolean");
@@ -50,9 +50,6 @@ namespace ParkApi.Migrations
                     b.Property<bool?>("Gym")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("ParkId")
-                        .HasColumnType("integer");
-
                     b.Property<bool?>("PetsAllowed")
                         .HasColumnType("boolean");
 
@@ -62,10 +59,7 @@ namespace ParkApi.Migrations
                     b.Property<bool?>("WiFi")
                         .HasColumnType("boolean");
 
-                    b.HasKey("FeaturesId");
-
-                    b.HasIndex("ParkId")
-                        .IsUnique();
+                    b.HasKey("FeaturesListId");
 
                     b.ToTable("FeaturesList");
                 });
@@ -73,19 +67,13 @@ namespace ParkApi.Migrations
             modelBuilder.Entity("ParkApi.model.LocationDetail", b =>
                 {
                     b.Property<int>("LocationId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("LocationId"));
 
                     b.Property<string>("City")
                         .HasColumnType("text");
 
                     b.Property<string>("Coodinates")
                         .HasColumnType("text");
-
-                    b.Property<int?>("ParkId")
-                        .HasColumnType("integer");
 
                     b.Property<string>("PostalCode")
                         .HasColumnType("text");
@@ -94,9 +82,6 @@ namespace ParkApi.Migrations
                         .HasColumnType("text");
 
                     b.HasKey("LocationId");
-
-                    b.HasIndex("ParkId")
-                        .IsUnique();
 
                     b.ToTable("LocationDetail");
                 });
@@ -152,7 +137,7 @@ namespace ParkApi.Migrations
                 {
                     b.HasOne("ParkApi.model.Parks", "Parks")
                         .WithOne("FeaturesID")
-                        .HasForeignKey("ParkApi.model.FeaturesList", "ParkId")
+                        .HasForeignKey("ParkApi.model.FeaturesList", "FeaturesListId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -163,7 +148,9 @@ namespace ParkApi.Migrations
                 {
                     b.HasOne("ParkApi.model.Parks", "Parks")
                         .WithOne("LocationID")
-                        .HasForeignKey("ParkApi.model.LocationDetail", "ParkId");
+                        .HasForeignKey("ParkApi.model.LocationDetail", "LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Parks");
                 });

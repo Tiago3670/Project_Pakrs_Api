@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting;
 using ParkApi.model;
+using System.Reflection.Metadata;
 
 namespace ParkApi.Data
 {
@@ -18,20 +19,18 @@ namespace ParkApi.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Parks>()
+            .HasOne(e => e.LocationID)
+            .WithOne(e => e.Parks)
+            .HasForeignKey<LocationDetail>("ParkId");
 
             modelBuilder.Entity<Parks>()
-        .HasOne(p => p.FeaturesID)  // Assuming FeaturesList is the navigation property in Parks
-        .WithMany()
-        .HasForeignKey(p => p.FeaturesID)
-        .OnDelete(DeleteBehavior.Restrict);  // Choose the appropriate delete behavior
-
-            modelBuilder.Entity<Parks>()
-                .HasOne(p => p.LocationID)  // Assuming LocationDetail is the navigation property in Parks
-                .WithMany()
-                .HasForeignKey(p => p.LocationID)
-                .OnDelete(DeleteBehavior.Restrict);
+            .HasOne(e => e.FeaturesID)
+            .WithOne(e => e.Parks)
+            .HasForeignKey<FeaturesList>("ParkId");
 
             modelBuilder.Entity<Favourites>().HasNoKey();
+
         }
 
         public DbSet<Users> Users { get; set; }

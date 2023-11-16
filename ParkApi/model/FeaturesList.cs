@@ -6,19 +6,15 @@ namespace ParkApi.model
     {
         [Required]
         [Key]
-        public int FeaturesListId { get; set; }
+        public int FeaturesId { get; set; }
 
         public bool? Food { get; set; }
-
         public bool? Shops { get; set; }
-
         public bool? Entertainment { get; set; }
-
         public bool? Gym { get; set; }
-
         public bool? WiFi { get; set; }
-
         public bool? PetsAllowed { get; set; }
+        public Parks Parks { get; set; } = null!; //navegação para a tabela principal
 
     }
 }
