@@ -8,11 +8,10 @@ namespace ParkApi.model
         [Required]
         [Key]
         public int LocationId { get; set; }
-
-        public string City { get; set; }
-        public string PostalCode { get; set; }
-        public string Street { get; set; }
-        public string Coodinates { get; set; }
+        public string? City { get; set; }
+        public string? PostalCode { get; set; }
+        public string? Street { get; set; }
+        public string? Coodinates { get; set; }
 
     }
 }

@@ -20,20 +20,25 @@ namespace ParkApi.Data
         {
 
             modelBuilder.Entity<Parks>()
-                .HasOne(p => p.FeaturesID);
+        .HasOne(p => p.FeaturesID)  // Assuming FeaturesList is the navigation property in Parks
+        .WithMany()
+        .HasForeignKey(p => p.FeaturesID)
+        .OnDelete(DeleteBehavior.Restrict);  // Choose the appropriate delete behavior
 
             modelBuilder.Entity<Parks>()
-            .HasOne(p => p.LocationID);
+                .HasOne(p => p.LocationID)  // Assuming LocationDetail is the navigation property in Parks
+                .WithMany()
+                .HasForeignKey(p => p.LocationID)
+                .OnDelete(DeleteBehavior.Restrict);
 
-          
             modelBuilder.Entity<Favourites>().HasNoKey();
         }
 
         public DbSet<Users> Users { get; set; }
-        public DbSet<LocationDetail> locationDetails { get; set; }
-        public DbSet<FeaturesList> featuresLists { get; set; }
-        public DbSet<Parks> parks { get; set; }
-        public DbSet<Favourites> favourites { get; set; }
+        public DbSet<LocationDetail> LocationDetail { get; set; }
+        public DbSet<FeaturesList> FeaturesList { get; set; }
+        public DbSet<Parks> Parks { get; set; }
+        public DbSet<Favourites> Favourites { get; set; }
 
     }
 }

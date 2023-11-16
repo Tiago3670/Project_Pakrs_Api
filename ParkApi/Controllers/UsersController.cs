@@ -21,8 +21,8 @@ namespace ParkApi.Controllers
             _logger = logger;
         }
 
-        [HttpGet("GetUser")]
-        public async Task<ActionResult<IEnumerable<Users>>> GetUsers() 
+        [HttpGet("GetAllUsers")]
+        public async Task<ActionResult<IEnumerable<Users>>> GetAllUsers() 
         {
             try
             {
@@ -32,16 +32,36 @@ namespace ParkApi.Controllers
             catch (Exception ex)
             {
                 // Log the exception
-                _logger.LogError($"Error retrieving users: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+        [HttpGet("GetUserById/{id}")]
+        public async Task<ActionResult<Users>> GetUserbyId(int id)
+        {
+            try
+            {
+                
+                var user = await  _context.Users.FindAsync(id);
+
+                if(user!=null)
+                {
+                    return Ok(user);
+                }
+                else
+                {
+                    return BadRequest("Invalid user data");
+
+                }
+            }
+            catch (Exception ex)
+            {
                 return StatusCode(500, "Internal server error");
             }
         }
 
-        [HttpPost]
-        public  IActionResult CreateUser([FromBody] Users _user) 
+        [HttpPost("AddUser")]
+        public async Task<IActionResult>CreateUser([FromBody] Users _user) 
         {
-            _logger.LogInformation($"Attempting to create user: {_user.Username}");
-
             if (_user == null)
             {
                 return BadRequest("Invalid user data");
@@ -49,19 +69,98 @@ namespace ParkApi.Controllers
 
             try
             {
-                _context.Users.Add(_user);
-                _context.SaveChanges();
+                await _context.Users.AddAsync(_user);
+                await _context.SaveChangesAsync();
+
 
                 return Ok(_user);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-
                 return StatusCode(500, "Internal server error");
             }
         }
 
-        
+        [HttpPut("EditUser/{id}")]
+        public IActionResult EditUser(int id, [FromBody] Users updatedUser)
+        {
+            if (updatedUser == null)
+            {
+                return BadRequest("Invalid user data");
+            }
+
+            var existingUser = _context.Users.Find(id);
+
+            if (existingUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            try
+            {
+                if(updatedUser.Username!=null) { existingUser.Username = updatedUser.Username; }
+                
+                if(updatedUser.Email!=null)   { existingUser.Email = updatedUser.Email;}
+
+                if(updatedUser.Password!=null) { existingUser.Password = updatedUser.Password;}
+            
+
+                _context.SaveChanges();
+
+                return Ok(existingUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpDelete("DeleteUser/{id}")]
+        public IActionResult DeleteUser(int id)
+        {
+            var existingUser = _context.Users.Find(id);
+
+            if (existingUser == null)
+            {
+                return NotFound("User not found");
+            }
+
+            try
+            {
+                _context.Users.Remove(existingUser);
+                _context.SaveChanges();
+
+                return Ok(existingUser);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpPost("AddParkFeatures")]
+        public async Task<ActionResult<FeaturesList>> AddParkFeatures([FromBody] FeaturesList _featuresList)
+        {
+            if (_featuresList == null)
+            {
+                return BadRequest("Invalid Features data");
+            }
+
+            try
+            {
+                await _context.FeaturesLists.AddAsync(_featuresList);
+                _context.SaveChanges();
+
+                return Ok(_featuresList);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+       
     }
 }
