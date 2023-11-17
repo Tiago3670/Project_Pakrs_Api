@@ -24,8 +24,12 @@ namespace ParkApi.Controllers
         {
             try
             {
-                var users = await _context.Parks.ToListAsync();
-                return Ok(users);
+                var parks = await _context.Parks
+                           .Include(p => p.Features)
+                           .Include(p => p.Location)
+                           .ToListAsync(); 
+                
+                return Ok(parks);
             }
             catch (Exception ex)
             {
@@ -38,8 +42,12 @@ namespace ParkApi.Controllers
         {
             try 
             {
-                var park=await _context.Parks.FindAsync(id);
-                if(park!=null)
+                var park = await _context.Parks
+                                            .Include(p => p.Features)
+                                            .Include(p => p.Location)
+                                            .FirstOrDefaultAsync(p => p.ParkId == id); 
+                
+                if (park!=null)
                 {
                     return Ok(park);
                 }
@@ -80,25 +88,100 @@ namespace ParkApi.Controllers
         }
 
 
-        [HttpPost("AddParkLocation")]
-        public async Task<IActionResult> AddLocation([FromBody] LocationDetail _locationDetail)
+        [HttpPut("EditPark/{id}")]
+        public async Task<ActionResult<Parks>> EditPark(int id, [FromBody] Parks update_park)
         {
-            if (_locationDetail == null)
+            if(update_park==null)
             {
-                return BadRequest("Invalid LocationDetail data");
+                return BadRequest("Invalid Data");
+            }
+
+            var exist_park = await _context.Parks
+                .Include(p => p.Features)
+                .Include(p => p.Location)
+                .FirstOrDefaultAsync(p => p.ParkId == id);
+            if (exist_park == null)
+            {
+                return NotFound("Park not found");
             }
 
             try
             {
+                if(update_park.Features!=null)
+                {
+                    if(update_park.Features.Food!=null)
+                    {
+                        exist_park.Features.Food = update_park.Features.Food;
+                    }
 
+                    if (update_park.Features.Shops != null)
+                    {
+                        exist_park.Features.Shops = update_park.Features.Shops;
+                    }
 
-                await _context.LocationDetail.AddAsync(_locationDetail);
-                Console.WriteLine("After AddAsync");
+                    if (update_park.Features.Entertainment != null)
+                    {
+                        exist_park.Features.Entertainment = update_park.Features.Entertainment;
+                    }
+
+                    if (update_park.Features.Gym != null)
+                    {
+                        exist_park.Features.Gym = update_park.Features.Gym;
+                    }
+
+                    if (update_park.Features.PetsAllowed != null)
+                    {
+                        exist_park.Features.PetsAllowed = update_park.Features.PetsAllowed;
+                    }
+
+                    if (update_park.Features.WiFi != null)
+                    {
+                        exist_park.Features.WiFi = update_park.Features.WiFi;
+                    }
+                }
+
+                
+                if(update_park.Location!=null)
+                {
+                    if(update_park.Location.Coodinates!=null)
+                    {
+                        exist_park.Location.Coodinates=update_park.Location.Coodinates;
+                    }
+
+                    if (update_park.Location.Street != null)
+                    {
+                        exist_park.Location.Street = update_park.Location.Street;
+                    }
+
+                    if (update_park.Location.City != null)
+                    {
+                        exist_park.Location.City = update_park.Location.City;
+                    }
+
+                    if (update_park.Location.PostalCode != null)
+                    {
+                        exist_park.Location.PostalCode = update_park.Location.PostalCode;
+                    }
+
+                }
+
+                if(update_park.ParkDescription!=null)
+                {
+                    exist_park.ParkDescription = update_park.ParkDescription;
+                }
+
+                if (update_park.ParkName != null)
+                {
+                    exist_park.ParkName = update_park.ParkName;
+                }
+
+                if (update_park.ImageUrl != null)
+                {
+                    exist_park.ImageUrl = update_park.ImageUrl;
+                }
 
                 await _context.SaveChangesAsync();
-                Console.WriteLine("After SaveChangesAsync");
-
-                return Ok(_locationDetail);
+                return Ok(exist_park);
             }
             catch (Exception ex)
             {
@@ -106,6 +189,34 @@ namespace ParkApi.Controllers
             }
 
         }
+
+
+        [HttpDelete("DeletePark/{id}")]
+        public async Task<IActionResult> DeletePark(int id)
+        {
+            var park = await _context.Parks
+                           .Include(p => p.Features)
+                           .Include(p => p.Location)
+                           .FirstOrDefaultAsync(p => p.ParkId == id);
+            if (park == null)
+            {
+                return NotFound("Park not found");
+            }
+
+            try
+            {
+                _context.Parks.Remove(park);
+                await _context.SaveChangesAsync();
+
+                return Ok(park);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+
+        }
+
 
     }
 }

@@ -141,26 +141,8 @@ namespace ParkApi.Controllers
             }
         }
 
-        [HttpPost("AddParkFeatures")]
-        public async Task<ActionResult<FeaturesList>> AddParkFeatures([FromBody] FeaturesList _featuresList)
-        {
-            if (_featuresList == null)
-            {
-                return BadRequest("Invalid Features data");
-            }
-
-            try
-            {
-                await _context.FeaturesList.AddAsync(_featuresList);
-                _context.SaveChanges();
-
-                return Ok(_featuresList);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        
+        
 
        
     }

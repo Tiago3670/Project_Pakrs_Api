@@ -6,7 +6,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ParkApi.Migrations
 {
     /// <inheritdoc />
-    public partial class initial : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -26,16 +26,15 @@ namespace ParkApi.Migrations
                 name: "Parks",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
+                    ParkId = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ParkId = table.Column<int>(type: "integer", nullable: false),
                     ParkName = table.Column<string>(type: "text", nullable: false),
                     ParkDescription = table.Column<string>(type: "text", nullable: false),
                     ImageUrl = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Parks", x => x.Id);
+                    table.PrimaryKey("PK_Parks", x => x.ParkId);
                 });
 
             migrationBuilder.CreateTable(
@@ -57,8 +56,6 @@ namespace ParkApi.Migrations
                 name: "FeaturesList",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     FeaturesId = table.Column<int>(type: "integer", nullable: false),
                     Food = table.Column<bool>(type: "boolean", nullable: true),
                     Shops = table.Column<bool>(type: "boolean", nullable: true),
@@ -69,12 +66,12 @@ namespace ParkApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FeaturesList", x => x.Id);
+                    table.PrimaryKey("PK_FeaturesList", x => x.FeaturesId);
                     table.ForeignKey(
                         name: "FK_FeaturesList_Parks_FeaturesId",
                         column: x => x.FeaturesId,
                         principalTable: "Parks",
-                        principalColumn: "Id",
+                        principalColumn: "ParkId",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -82,8 +79,6 @@ namespace ParkApi.Migrations
                 name: "LocationDetail",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     LocationId = table.Column<int>(type: "integer", nullable: false),
                     City = table.Column<string>(type: "text", nullable: true),
                     PostalCode = table.Column<string>(type: "text", nullable: true),
@@ -92,26 +87,14 @@ namespace ParkApi.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LocationDetail", x => x.Id);
+                    table.PrimaryKey("PK_LocationDetail", x => x.LocationId);
                     table.ForeignKey(
                         name: "FK_LocationDetail_Parks_LocationId",
                         column: x => x.LocationId,
                         principalTable: "Parks",
-                        principalColumn: "Id",
+                        principalColumn: "ParkId",
                         onDelete: ReferentialAction.Cascade);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FeaturesList_FeaturesId",
-                table: "FeaturesList",
-                column: "FeaturesId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_LocationDetail_LocationId",
-                table: "LocationDetail",
-                column: "LocationId",
-                unique: true);
         }
 
         /// <inheritdoc />

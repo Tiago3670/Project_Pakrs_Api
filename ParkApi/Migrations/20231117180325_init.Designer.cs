@@ -12,8 +12,8 @@ using ParkApi.Data;
 namespace ParkApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20231116235712_initial")]
-    partial class initial
+    [Migration("20231117180325_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -38,17 +38,11 @@ namespace ParkApi.Migrations
 
             modelBuilder.Entity("ParkApi.model.FeaturesList", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("FeaturesId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<bool?>("Entertainment")
                         .HasColumnType("boolean");
-
-                    b.Property<int>("FeaturesId")
-                        .HasColumnType("integer");
 
                     b.Property<bool?>("Food")
                         .HasColumnType("boolean");
@@ -65,21 +59,15 @@ namespace ParkApi.Migrations
                     b.Property<bool?>("WiFi")
                         .HasColumnType("boolean");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("FeaturesId")
-                        .IsUnique();
+                    b.HasKey("FeaturesId");
 
                     b.ToTable("FeaturesList");
                 });
 
             modelBuilder.Entity("ParkApi.model.LocationDetail", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<int>("LocationId")
                         .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("City")
                         .HasColumnType("text");
@@ -87,30 +75,24 @@ namespace ParkApi.Migrations
                     b.Property<string>("Coodinates")
                         .HasColumnType("text");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("PostalCode")
                         .HasColumnType("text");
 
                     b.Property<string>("Street")
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("LocationId")
-                        .IsUnique();
+                    b.HasKey("LocationId");
 
                     b.ToTable("LocationDetail");
                 });
 
             modelBuilder.Entity("ParkApi.model.Parks", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ParkId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("ParkId"));
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -120,14 +102,11 @@ namespace ParkApi.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("ParkId")
-                        .HasColumnType("integer");
-
                     b.Property<string>("ParkName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.HasKey("Id");
+                    b.HasKey("ParkId");
 
                     b.ToTable("Parks");
                 });

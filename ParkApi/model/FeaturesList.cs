@@ -6,8 +6,6 @@ namespace ParkApi.model
     {
         [Required]
         [Key]
-        public int Id { get; set; }
-
         public int FeaturesId { get; set; }
         public bool? Food { get; set; }
         public bool? Shops { get; set; }

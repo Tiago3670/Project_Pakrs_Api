@@ -7,7 +7,6 @@ namespace ParkApi.model
     {
         [Required]
         [Key]
-        public int Id { get; set; }
         public int LocationId { get; set; }
         public string? City { get; set; }
         public string? PostalCode { get; set; }
