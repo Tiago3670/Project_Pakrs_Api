@@ -69,14 +69,15 @@ namespace ParkApi.Controllers
 
             try
             {
-                await _context.Users.AddAsync(_user);
-                await _context.SaveChangesAsync();
+                 _context.Users.Add(_user);
+                 _context.SaveChanges();
 
 
                 return Ok(_user);
             }
             catch (Exception ex)
             {
+                
                 return StatusCode(500, "Internal server error");
             }
         }

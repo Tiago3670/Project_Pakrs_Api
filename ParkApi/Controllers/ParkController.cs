@@ -11,8 +11,8 @@ namespace ParkApi.Controllers
     {
 
         private readonly AppDbContext _context;
-        private readonly ILogger<UsersController> _logger;
-        public ParkController(AppDbContext context, ILogger<UsersController> logger)
+        private readonly ILogger<ParkController> _logger;
+        public ParkController(AppDbContext context, ILogger<ParkController> logger)
         {
             _context = context;
             _logger= logger;

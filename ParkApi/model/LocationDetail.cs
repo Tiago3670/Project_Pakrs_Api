@@ -7,12 +7,12 @@ namespace ParkApi.model
     {
         [Required]
         [Key]
+        public int Id { get; set; }
         public int LocationId { get; set; }
         public string? City { get; set; }
         public string? PostalCode { get; set; }
         public string? Street { get; set; }
         public string? Coodinates { get; set; }
-        public Parks? Parks { get; set; } = null!; //navegação para a tabela principal
 
     }
 }

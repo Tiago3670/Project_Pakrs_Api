@@ -20,15 +20,17 @@ namespace ParkApi.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Parks>()
-            .HasOne(e => e.LocationID)
-            .WithOne(e => e.Parks)
-            .HasForeignKey<LocationDetail>("ParkId");
-
+              .HasOne(e => e.Location)
+              .WithOne()
+              .HasForeignKey<LocationDetail>(e => e.LocationId)
+              .IsRequired();
+           
             modelBuilder.Entity<Parks>()
-            .HasOne(e => e.FeaturesID)
-            .WithOne(e => e.Parks)
-            .HasForeignKey<FeaturesList>("ParkId");
-
+             .HasOne(e => e.Features)
+             .WithOne()
+             .HasForeignKey<FeaturesList>(e => e.FeaturesId)
+             .IsRequired();
+            
             modelBuilder.Entity<Favourites>().HasNoKey();
 
         }

@@ -1,7 +1,8 @@
 {
   "ExpandedNodes": [
     "",
-    "\\Controllers"
+    "\\Controllers",
+    "\\Migrations"
   ],
   "SelectedNode": "\\ParkApi.sln",
   "PreviewInSolutionExplorer": false
