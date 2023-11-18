@@ -12,12 +12,42 @@ namespace ParkApi.Controllers
 
         private readonly AppDbContext _context;
         private readonly ILogger<ParkController> _logger;
+
         public ParkController(AppDbContext context, ILogger<ParkController> logger)
         {
             _context = context;
             _logger= logger;
         }
 
+        [HttpGet("GetLocations")]
+        public async Task<ActionResult<IEnumerable<LocationDetail>>> GetAllLocations()
+        {
+            try
+            {
+                var locations = await _context.LocationDetail.ToListAsync();
+
+                return Ok(locations);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
+        [HttpGet("GetFeatures")]
+        public async Task<ActionResult<IEnumerable<FeaturesList>>> GetAllFeatures()
+        {
+            try
+            {
+                var features = await _context.FeaturesList.ToListAsync();
+
+                return Ok(features);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
 
         [HttpGet("GetParks")]
         public async Task<ActionResult<IEnumerable<Parks>>> GetAllParks()

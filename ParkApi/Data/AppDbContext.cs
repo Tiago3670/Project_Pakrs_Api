@@ -15,6 +15,8 @@ namespace ParkApi.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder options) 
         {
+           
+
             options.UseNpgsql(Configuration.GetConnectionString("WebApiDatabase"));
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

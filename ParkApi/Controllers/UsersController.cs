@@ -35,6 +35,7 @@ namespace ParkApi.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+      
         [HttpGet("GetUserById/{id}")]
         public async Task<ActionResult<Users>> GetUserbyId(int id)
         {
@@ -72,7 +73,6 @@ namespace ParkApi.Controllers
                  _context.Users.Add(_user);
                  _context.SaveChanges();
 
-
                 return Ok(_user);
             }
             catch (Exception ex)
@@ -81,6 +81,7 @@ namespace ParkApi.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
         [HttpPut("EditUser/{id}")]
         public IActionResult EditUser(int id, [FromBody] Users updatedUser)
@@ -116,6 +117,7 @@ namespace ParkApi.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+
 
         [HttpDelete("DeleteUser/{id}")]
         public IActionResult DeleteUser(int id)
