@@ -14,12 +14,35 @@ namespace ParkApi.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<UsersController> _logger;
-
         public UsersController(AppDbContext context, ILogger<UsersController> logger) { 
         
             _context = context;
             _logger = logger;
         }
+
+
+
+        [HttpPost("Login")]
+        public async Task<ActionResult> Login([FromBody] LoginModel model)
+        {
+            try
+            {
+                var user = await _context.Users
+                    .FirstOrDefaultAsync(u => u.Username == model.Username && u.Password == model.Password);
+
+                if (user != null)
+                {
+                    return Ok(new { Message = "Login successful", userId = user.UserId, UserName = user.Username });
+                }
+
+                return StatusCode(500, "User not found");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
 
         [HttpGet("GetAllUsers")]
         public async Task<ActionResult<IEnumerable<Users>>> GetAllUsers() 
